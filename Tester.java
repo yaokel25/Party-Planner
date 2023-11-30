@@ -1,113 +1,71 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+/**
+*Keliang Yao
+*This is the Tester class. It will parse and load the data from the text file into ArrayList guestList. It will remove extra people, and place every person at a table and 
+*have search functionality to print rosters by table and company and to search for specific
+*guests with guest ID.
+**/
 
+import java.util.ArrayList;//import ArrayList class
+import java.util.Scanner;//import Scanner class
 
 public class Main{
    public static final Scanner scan = new Scanner(System.in);
+  public static ArrayList<ArrayList<Attendee>> company = new ArrayList<ArrayList<Attendee>>();
    public static int numCompanies = 16;
-   public static ArrayList<Company> company = new ArrayList<Company>();
+  public static ArrayList<ArrayList<Attendee>> table = new ArrayList<ArrayList<Attendee>>();
+
    public static String[] companies = {"Wal-Mart", "Kroger", "Amazon", "Lowes", "Best Western", "KMart", "Fusian", "Heinz", "Gucci", "Prada", "Nike", "Dodge", "Maserati", "Razor", "AMD", "Razer"};
-   //private static ArrayList<Attendee> A1= new ArrayList<Attendee>();
-   public static ArrayList<ArrayList<Integer>> companyMulti = new ArrayList<ArrayList<Integer>>();
-   public static int[][] table = new int[10][10];
+  
    public static int numTables = 10;
    public static int numSeats = 10;
 public static void main (String[] args){
    Party p1 = new Party();
-   p1.parseData();
-  /*while(p1.guestList.size()< 100){
+   p1.parseData();//parse text file and add attendee objects to guestList-also removes extra people
+  while(p1.guestList.size() < 100){//prompts user to manually register while there are less than 100 guests
     p1.manualRegister();
-  }*/
-   /*do{
-       /*while(p1.guestList.size() < 100){
-           p1.manualRegister();
-       }
-       companyMulti.clear();//clears companyMulti after every iteration 
-       company.clear();//clears company after every iteration
-           for(int i = 0; i < numCompanies; i++){
-               companyMulti.add(new ArrayList<Integer>());
-               for(int j = 0; j< p1.guestList.size(); j++){
-                   int holdMem = p1.setCompanyMem(i, j);
-                   if(holdMem != -1){
-                       companyMulti.get(i).add(holdMem);
-                   }
-               }
-               Company c1 = new Company(i, p1.setCompanyNum(p1.guestList, i));
-               company.add(c1);
-           }//for
-
-       p1.removePeople(company, companyMulti);
-   }*/
-     /*for(int i = 0; i < numCompanies; i++){
-      companyMulti.add(new ArrayList<Integer>());
-      for(int j = 0; j< p1.guestList.size(); j++){
-          int holdMem = p1.setCompanyMem(i, j);
-          if(holdMem != -1){
-              companyMulti.get(i).add(holdMem);
-          }
+  }//if
+  for(int y = 0; y < numCompanies; y++){//make 2d arrayList of attendee objects sorted into companies
+    company.add(new ArrayList<Attendee>());
+    p1.makeCompany(y, company);
+  }
+  System.out.print(company);
+  for(int c = 0; c < numTables; c++){//initializing ArrayList tables so it has 10 tables
+    table.add(new ArrayList<Attendee>());
+  }
+  int tableCount = 0;
+  int seatCount = 0;
+  
+  for(int n = 0; n < numCompanies; n++){//seating people into tables
+    for(int u = 0; u < company.get(n).size(); u++){
+      if(tableCount == numTables){//if there are no more tables with the seat number seatCount available, move on to next seat#
+        tableCount = 0;//go to table 1
+        seatCount++;//move to next seat #
       }
-		 }*/
+      company.get(n).get(u).setTable(tableCount);//setting table # to attendee object
+      company.get(n).get(u).setSeat(seatCount);//setting seat # to attendee object
+      table.get(tableCount).add(company.get(n).get(u));//adding attendee object to arrayList table 
+      tableCount++;//moving to next table
+    }//for-u
+  }//for-n
+  //System.out.print(table); print table to check code
+  
  
-   /*for(int g = 0; g < 16; g++){
-       for(int y = 0; y < companyMulti.get(g).size();y++){
-           System.out.print(companyMulti.get(g).get(y) + " ");
-       }
-       System.out.println();
-   } *///printing companyMulti to check 
-   for(int l = 0; l < numTables; l++){//initializing table array so empty seats are -1
-       for(int p = 0; p < numSeats; p++){
-           table[l][p] = -1;
-       }
-   }
-	int tableNum = 0;
-	int seatNum = 0;
-	int[][] tables = new int[10][10];
-   for(int k = 0; k < numCompanies; k++){
-  	//p1.placePeople(companyMulti, k, p1.guestList);
-		ArrayList<Integer> holdList = companyMulti.get(k);//make a copy of companyMulti
-		for(int l = 0; l < holdList.size(); l++){
-			if(tableNum == 10){
-				tableNum = 0;
-				seatNum++;
-			}
-			int holdID = holdList.get(l);
-			Attendee holdAttendee = p1.guestList.get(holdID);
-			tables[tableNum][seatNum] = holdAttendee.getID();
-			holdAttendee.setTable(tableNum);
-			holdAttendee.setSeat(seatNum);
-			System.out.print(holdID+" "+holdAttendee);
-			tableNum++;
-		}
-   }
-	p1.setTable(tables);
-   for(int g = 0; g < 10; g++){
-       for(int q = 0; q < 10; q++){
-           System.out.print(p1.table[g][q] + " ");
-       }
-       System.out.println();
-   }
-
+   
    System.out.println("Would you like to print roster by company? (y/n)");
    char answer = scan.nextLine().charAt(0);
    if(answer == 'y'){
        System.out.println("Enter company ID (should be a number): ");
-       int companySearch = scan.nextInt();
+       int companySearch = scan.nextInt() - 1;
        scan.nextLine();
-       for(int k = 0; k < companyMulti.get(companySearch).size(); k++){
-           System.out.print(p1.printRoster1(companyMulti, companySearch, k));
-       }
-
-
-   }
+       System.out.print(company.get(companySearch));
+   }//if
    System.out.println("Would you like to print roster by table (y/n)");
    char answer1 = scan.nextLine().charAt(0);
    if(answer1 == 'y'){
        System.out.println("Enter table number (0-9): ");
        int tableSearch = scan.nextInt();
        scan.nextLine();
-       for(int b = 0; b < numSeats; b++){
-           System.out.print(p1.printRoster2(tableSearch) + " ");
-       }
+       System.out.print(table.get(tableSearch));
    }
    System.out.println("Would you like to get user information using their id? (y/n)");
    char answer2 = scan.nextLine().charAt(0);
@@ -115,7 +73,15 @@ public static void main (String[] args){
        System.out.println("Enter person ID: ");
        int personID = scan.nextInt();
        scan.nextLine();
-       System.out.println(p1.getPerson(personID));
+      for(int h = 0; h < numCompanies; h++){
+        for(int j = 0; j < company.get(h).size(); j++){
+          if(company.get(h).get(j).getID() == personID){
+            System.out.println(company.get(h).get(j));
+            break;
+          }
+        }
+      }
+      
    }
 }//main
 }//tester
