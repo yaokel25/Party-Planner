@@ -6,6 +6,6 @@ Inaddition to the preregistered guests, there will also be 10 walk ins that will
 
 I have gotten the parsing and removing extra people functions down but cannot finish the seating and searching part of the project. 11/27
 
-I have finished the project. There is an extra class-Company from earlier iterations that is not used in the final project. 11/29
+I have finished the project. I could not get sort function to work so i created a 2d arrayList of attendee objects sorted by company instead. There is also an extra class called Company from earlier iterations that is not used in the final project. 11/29
 ![Screen Shot 2023-11-29 at 9 57 13 PM](https://github.com/yaokel25/Party-Planner/assets/114490360/b34468cd-4c97-478c-afb7-7055261eb5c8)
 
